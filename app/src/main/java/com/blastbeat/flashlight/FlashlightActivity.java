@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -92,11 +93,16 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     @Override
     protected void onPause() {
         super.onPause();
-  /*      // Release the Camera because we don't need it when paused
-        if (myCamera != null) {
-            myCamera.release();
-            myCamera = null;
-        } */
+       //Release camera in SurfaceDestroyed instead of here to avoid
+        // null pointer problems
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d("SomeTag", "Somestring");
+
     }
 
     @Override
@@ -158,6 +164,14 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     public void surfaceDestroyed(SurfaceHolder holder) {
         myCamera.stopPreview();
         mHolder = null;
+
+        // Need to release camera from SurfaceView
+        // Would do it in onPause but this gets called afterwards
+        // so it would result in a NullPointerException if this wasn't here
+        if (myCamera != null) {
+            myCamera.release();
+            myCamera = null;
+        }
     }
 
 }
