@@ -81,6 +81,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         });
     }
 
+    // Added test comment
     /* @Override - TODO: FIND OUT WHY NOT WORKING!!!
     protected void OnPause() {
         super.onPause();
