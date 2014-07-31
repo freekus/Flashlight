@@ -36,6 +36,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     boolean isCameraPresent = true;
     boolean isCameraFlashPresent = true;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flashlight);
@@ -79,6 +80,14 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
             }
         });
     }
+
+    /* @Override - TODO: FIND OUT WHY NOT WORKING!!!
+    protected void OnPause() {
+        super.onPause();
+
+        //Use this to turn off flashlight when paused
+        turnOffLight();
+    } */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
