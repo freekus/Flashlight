@@ -33,13 +33,19 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     //final boolean isCameraFlashPresent = myPackageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     // above is erroring out
 
-    boolean isCameraPresent = true;
-    boolean isCameraFlashPresent = true;
+    private boolean isCameraPresent;
+    private boolean isCameraFlashPresent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flashlight);
+
+        isCameraPresent = getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA);
+
+        isCameraFlashPresent = getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
 
         if (!isCameraPresent) {
@@ -81,15 +87,17 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         });
     }
 
-    // Added test comment
-    // Added a second test comment
-    /* @Override - TODO: FIND OUT WHY NOT WORKING!!!
-    protected void OnPause() {
+    //Causing surfaceCreated and surfaceDestroyed null pointer problems
+    // releasing and making null the problem probably?
+    @Override
+    protected void onPause() {
         super.onPause();
-
-        //Use this to turn off flashlight when paused
-        turnOffLight();
-    } */
+  /*      // Release the Camera because we don't need it when paused
+        if (myCamera != null) {
+            myCamera.release();
+            myCamera = null;
+        } */
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
