@@ -56,6 +56,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
 
         if (!isCameraFlashPresent) {
             //Use Alert to tell user camera flash isn't present
+            Log.d("TAG", "NO FLASH PRESENT");
             finish();
         }
 
