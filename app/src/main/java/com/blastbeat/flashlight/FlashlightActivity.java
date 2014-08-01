@@ -102,7 +102,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     protected void onResume() {
         super.onResume();
 
-        Log.d("SomeTag", "Somestring");
+        // Re-attach camera is SurfaceCreated to avoid problems
 
     }
 
@@ -154,6 +154,12 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
                                int height) {}
 
     public void surfaceCreated(SurfaceHolder holder) {
+       if (myCamera == null)
+       {
+           myCamera = Camera.open();
+           isLightOn = false;
+       }
+
         mHolder = holder;
         try {
             myCamera.setPreviewDisplay(mHolder);
