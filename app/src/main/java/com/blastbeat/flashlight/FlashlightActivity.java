@@ -25,14 +25,10 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     ImageButton myImageButton;
     boolean isLightOn = false;
 
-    // Needed for Galaxy Nexus support
+    // Needed for Galaxy Nexus (et al) support
     public static SurfaceView preview;
     public static SurfaceHolder mHolder;
 
-    // Use PackageManager to determine whether camera/camera flash is present
-    //  final boolean isCameraPresent = myPackageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-    //final boolean isCameraFlashPresent = myPackageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-    // above is erroring out
 
     private boolean isCameraPresent;
     private boolean isCameraFlashPresent;
@@ -42,6 +38,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flashlight);
 
+        // Use PackageManager to determine whether camera/camera flash is present
         isCameraPresent = getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
@@ -68,6 +65,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         mHolder = preview.getHolder();
         mHolder.addCallback(this);
 
+       // Open camera
         myCamera = Camera.open();
 
         // Needed for Galaxy Nexus support
@@ -96,6 +94,12 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         super.onPause();
        //Release camera in SurfaceDestroyed instead of here to avoid
         // null pointer problems
+        Log.d("TAG", "onPause hit");
+
+        // Need this here to catch when lock screen is activated
+        // because surfaceDestroyed isn't called then
+        turnOffLight();
+
     }
 
     @Override
@@ -103,7 +107,11 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         super.onResume();
 
         // Re-attach camera is SurfaceCreated to avoid problems
+        // HOWEVER
+        //TODO have to add surfaceCreated code here as the surfaceCreated is bypassed when screen locking
+        Log.d("TAG", "onResume Hit");
 
+        
     }
 
     @Override
@@ -154,6 +162,8 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
                                int height) {}
 
     public void surfaceCreated(SurfaceHolder holder) {
+      Log.d("TAG", "surfaceCreated hit");
+
        if (myCamera == null)
        {
            myCamera = Camera.open();
@@ -169,7 +179,10 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
+       Log.d("TAG", "SurfaceDestroyed hit");
+
         myCamera.stopPreview();
+
         mHolder = null;
 
         // Need to release camera from SurfaceView
