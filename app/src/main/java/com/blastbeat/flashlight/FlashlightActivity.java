@@ -111,7 +111,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         //TODO have to add surfaceCreated code here as the surfaceCreated is bypassed when screen locking
         Log.d("TAG", "onResume Hit");
 
-        
+
     }
 
     @Override
