@@ -11,7 +11,12 @@
     <ImageButton
         android:id="@+id/buttonSwitch"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dip"
+        android:src="@drawable/off"
+        android:background="@null"
+        android:contentDescription="@null"/>
 
     <SurfaceView
         android:id="@+id/PREVIEW"

@@ -1,4 +1,5 @@
 // Good reference - http://web.stanford.edu/class/cs193a/
+//TODO is slow changing image from off to on. Fix this
 
 package com.blastbeat.flashlight;
 
@@ -81,6 +82,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         myImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               // toggleButtonImage();
                 toggleFlashlight(isLightOn);
             }
         });
@@ -138,21 +140,35 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     }
 
     private void turnOnLight() {
+        toggleButtonImage();
+
         myCameraParameters = myCamera.getParameters();
         myCameraParameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
         myCamera.setParameters(myCameraParameters);
         myCamera.startPreview();
+
         isLightOn = true;
     }
 
     private void turnOffLight() {
+        toggleButtonImage();
+
         myCameraParameters = myCamera.getParameters();
         myCameraParameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         myCamera.setParameters(myCameraParameters);
         myCamera.stopPreview();
+
         isLightOn = false;
     }
 
+    private void toggleButtonImage () {
+        if (isLightOn) {
+            myImageButton.setImageResource(R.drawable.off);
+        }
+        else {
+            myImageButton.setImageResource(R.drawable.on);
+        }
+    }
     //Below is for Galaxy Nexus support - needs SurfaceView
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
