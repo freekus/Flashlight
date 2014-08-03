@@ -29,7 +29,6 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     public static SurfaceView preview;
     public static SurfaceHolder mHolder;
 
-
     private boolean isCameraPresent;
     private boolean isCameraFlashPresent;
 
@@ -65,7 +64,7 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         mHolder = preview.getHolder();
         mHolder.addCallback(this);
 
-       // Open camera
+        // Open camera
         myCamera = Camera.open();
 
         // Needed for Galaxy Nexus support
@@ -92,14 +91,13 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     @Override
     protected void onPause() {
         super.onPause();
-       //Release camera in SurfaceDestroyed instead of here to avoid
+        //Release camera in SurfaceDestroyed instead of here to avoid
         // null pointer problems
         Log.d("TAG", "onPause hit");
 
         // Need this here to catch when lock screen is activated
         // because surfaceDestroyed isn't called then
         turnOffLight();
-
     }
 
     @Override
@@ -110,8 +108,6 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         // HOWEVER
         //TODO have to add surfaceCreated code here as the surfaceCreated is bypassed when screen locking
         Log.d("TAG", "onResume Hit");
-
-
     }
 
     @Override
@@ -159,17 +155,19 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
 
     //Below is for Galaxy Nexus support - needs SurfaceView
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                               int height) {}
+                               int height) {
+    }
 
     public void surfaceCreated(SurfaceHolder holder) {
-      Log.d("TAG", "surfaceCreated hit");
+        Log.d("TAG", "surfaceCreated hit");
 
-       if (myCamera == null)
-       {
-           myCamera = Camera.open();
-           isLightOn = false;
-       }
+        if (myCamera == null) {
+            myCamera = Camera.open();
+            isLightOn = false;
+        }
 
+       // Create the surfaceHolder and start updating the preview surface
+       // The camera needs a surface to start the preview
         mHolder = holder;
         try {
             myCamera.setPreviewDisplay(mHolder);
@@ -179,10 +177,12 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-       Log.d("TAG", "SurfaceDestroyed hit");
+        Log.d("TAG", "SurfaceDestroyed hit");
 
+        // Stop updating the preview surface
         myCamera.stopPreview();
 
+        //Remove the surfaceHolder
         mHolder = null;
 
         // Need to release camera from SurfaceView
@@ -193,5 +193,5 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
             myCamera = null;
         }
     }
-
+    
 }
