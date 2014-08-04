@@ -1,9 +1,4 @@
 // Good reference - http://web.stanford.edu/class/cs193a/
-//TODO is slow changing image from off to on. Fix this
-//TODO maybe change the way the orientation change is being done - not best practice:
-// - maybe use onSaveInstanceState () and onRestoreInstanceState () or similar
-//TODO - also maybe use something to detect the screen rotation/orientation in onPause etc.
-// - if screen is rotated don't turn off light, for example
 
 package com.blastbeat.flashlight;
 
