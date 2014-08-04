@@ -6,6 +6,7 @@ package com.blastbeat.flashlight;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -110,6 +111,17 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         // HOWEVER
         //TODO have to add surfaceCreated code here as the surfaceCreated is bypassed when screen locking
         Log.d("TAG", "onResume Hit");
+    }
+
+    // Added this along with the line "android:configChanges="orientation|screenSize""
+    // in AndroidManifest.xml to stop Activity being destroyed and recreated on orientation change
+    // Avoids onPause/surfaceDestroyed onResume/surfaceCreated being called and turning off light on change
+    // of orientation
+    // Might not be the best thing to do!!!
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d("TAG", "onConfigurationChanged Hit");
     }
 
     @Override
