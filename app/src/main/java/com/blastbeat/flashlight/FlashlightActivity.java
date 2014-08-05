@@ -3,7 +3,9 @@
 package com.blastbeat.flashlight;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
@@ -14,6 +16,8 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import java.io.IOException;
@@ -36,6 +40,14 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Make this activity, full screen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Hide the Title bar of this activity screen
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_flashlight);
 
         // Use PackageManager to determine whether camera/camera flash is present
@@ -48,13 +60,39 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
 
         if (!isCameraPresent) {
             //Use Alert to tell user camera isn't present
-            finish();
+            // device doesn't support flash
+            // Show alert message and close the application
+            AlertDialog alert = new AlertDialog.Builder(FlashlightActivity.this)
+                    .create();
+            alert.setTitle("Error");
+            alert.setMessage("Your device doesn't support the camera device");
+            alert.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // closing the application
+                    finish();
+                }
+            });
+            alert.show();
+            return;
         }
 
         if (!isCameraFlashPresent) {
             //Use Alert to tell user camera flash isn't present
-            Log.d("TAG", "NO FLASH PRESENT");
-            finish();
+            //Use Alert to tell user camera isn't present
+            // device doesn't support flash
+            // Show alert message and close the application
+            AlertDialog alert = new AlertDialog.Builder(FlashlightActivity.this)
+                    .create();
+            alert.setTitle("Error");
+            alert.setMessage("Your device doesn't support the camera flash");
+            alert.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // closing the application
+                    finish();
+                }
+            });
+            alert.show();
+            return;
         }
 
         //findViewbyId -- get a pointer to something. Cast the pointer to ImageButton
@@ -174,10 +212,10 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
 
     private void toggleButtonImage () {
         if (isLightOn) {
-            myImageButton.setImageResource(R.drawable.off);
+            myImageButton.setImageResource(R.drawable.off1);
         }
         else {
-            myImageButton.setImageResource(R.drawable.on);
+            myImageButton.setImageResource(R.drawable.on2);
         }
     }
     //Below is for Galaxy Nexus support - needs SurfaceView

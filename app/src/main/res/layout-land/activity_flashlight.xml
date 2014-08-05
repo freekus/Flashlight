@@ -16,8 +16,7 @@
         android:src="@drawable/off1"
         android:background="@null"
         android:contentDescription="@null"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerInParent="true" />
 
     <SurfaceView
         android:id="@+id/PREVIEW"
