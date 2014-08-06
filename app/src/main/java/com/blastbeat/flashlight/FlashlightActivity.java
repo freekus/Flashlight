@@ -3,7 +3,10 @@
 package com.blastbeat.flashlight;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -48,24 +52,8 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         //set content view AFTER ABOVE sequence (to avoid crash)
         setContentView(R.layout.activity_flashlight);
 
-        // Use PackageManager to determine whether camera/camera flash is present
-        isCameraPresent = getApplicationContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        checkForCamera();
 
-        isCameraFlashPresent = getApplicationContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-
-
-        if (!isCameraPresent) {
-            //Use Alert to tell user camera isn't present
-            finish();
-        }
-
-        if (!isCameraFlashPresent) {
-            //Use Alert to tell user camera flash isn't present
-            Log.d("TAG", "NO FLASH PRESENT");
-            finish();
-        }
 
         //findViewbyId -- get a pointer to something. Cast the pointer to ImageButton
         myImageButton = (ImageButton) findViewById(R.id.buttonSwitch);
@@ -79,11 +67,13 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
         myCamera = Camera.open();
 
         // Needed for Galaxy Nexus support
-        try {
-            myCamera.setPreviewDisplay(mHolder);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (myCamera != null) {
+            try {
+                myCamera.setPreviewDisplay(mHolder);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         // button.setOnClickListener - runs "toggleFlashlight" method when button is clicked.
@@ -96,8 +86,41 @@ public class FlashlightActivity extends Activity implements SurfaceHolder.Callba
                 toggleFlashlight(isLightOn);
             }
         });
+
+
     }
 
+    private void checkForCamera() {
+        // Use PackageManager to determine whether camera/camera flash is present
+        isCameraPresent = getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA);
+
+        isCameraFlashPresent = getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+
+
+        if (!isCameraPresent) {
+            Log.d("TAG", "NO CAMERA PRESENT");
+            Context context = getApplicationContext();
+            CharSequence text = "Hello toast!";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            finish();
+           // return;
+        }
+
+        if (!isCameraFlashPresent) {
+            //Use Alert to tell user camera flash isn't present
+            Log.d("TAG", "NO FLASH PRESENT");
+            // device doesn't support flash
+            // Show alert message and close the application
+            finish();
+            //return;
+        }
+
+    }
     //Causing surfaceCreated and surfaceDestroyed null pointer problems
     // releasing and making null the problem probably?
     @Override
